@@ -76,7 +76,7 @@ class Menu:
             },
             '9': {
                 'text': 'Voltar ao menu principal.', 
-                'action': self.execute
+                'action': '_menu_dict'
             },
         }
 
@@ -100,7 +100,7 @@ class Menu:
             },
             '9': {
                 'text': 'Voltar ao menu principal.', 
-                'action': self.execute
+                'action': '_menu_dict'
             }
         }
 
@@ -109,31 +109,32 @@ class Menu:
 
     #MENU FUNCTION
     def execute(self, menu_to_show=None):
-        if menu_to_show is None:
-            menu_options = self._menu_dict
-        else:
-            menu_options = getattr(self, menu_to_show)
-
-        os.system('cls')
-        print(menu_options['menu_title'])
-
-        for key, item in menu_options.items():
-            if len(key) > 2: #pular exibição do 'menu_title' novamente.
-                continue
-            print(f'{key}. {item["text"]}')
-        print()
-
         while True:
-            menu_key_choosed = ask_menu_choose()
-            if menu_key_choosed not in menu_options or len(menu_key_choosed) > 2:
-                show_invalid_input()
+            if menu_to_show is None:
+                menu_options = self._menu_dict
+            else:
+                menu_options = getattr(self, menu_to_show)
+
+            os.system('cls')
+            print(menu_options['menu_title'])
+
+            for key, item in menu_options.items():
+                if len(key) > 2: #pular exibição do 'menu_title' novamente.
+                    continue
+                print(f'{key}. {item["text"]}')
+            print()
+
+            while True:
+                menu_key_choosed = ask_menu_choose()
+                if menu_key_choosed not in menu_options or len(menu_key_choosed) > 2:
+                    show_invalid_input()
+                    continue
+                break
+
+            if isinstance(menu_options[menu_key_choosed]['action'], str): #se 'action' for str (no caso dos submenus) volta o loop para exibição do outro menu
+                menu_to_show=menu_options[menu_key_choosed]['action']
                 continue
-            break
-
-        if isinstance(menu_options[menu_key_choosed]['action'], str): #se 'action' for str (no caso dos submenus) volta o loop para exibição do outro menu
-            self.execute(menu_to_show=menu_options[menu_key_choosed]['action'])
-        else:
-            menu_options[menu_key_choosed]['action']()
-
-        time.sleep(1)
-        self.execute()
+            else:
+                menu_options[menu_key_choosed]['action']()
+                time.sleep(1)
+                continue
