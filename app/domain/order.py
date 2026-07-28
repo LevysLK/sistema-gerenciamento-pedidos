@@ -1,7 +1,7 @@
 from .customer import Customer
 from .orderitem import OrderItem
 from .paymentmethod import PaymentMethod, PaymentNotDefined
-from app.utils import get_last_order_n
+from app.utils import get_next_order_n_act
 from datetime import datetime
 
 class Order:
@@ -19,7 +19,7 @@ class Order:
         self._itens = {}
         self._order_status = 'aberto'
         self.payment_method = PaymentNotDefined()
-        self.order_n = get_last_order_n()
+        self.order_n = get_next_order_n_act()
 
     def __repr__(self):
         return f'pedido={self.order_n}, {self.customer}, status={self.order_status}, forma_pgt={self.payment_method}, itens={self.itens}'
