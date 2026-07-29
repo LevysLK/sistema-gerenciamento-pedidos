@@ -39,11 +39,16 @@ class ProductsRepository:
         self._push_products_list(temp_list)
         return True
 
-    def replace_product(self, old_product: Product, new_product: Product=None):
+    def replace_product(self, old_product: Product, new_product: Product | None=None):
         if new_product is None:
             new_product = old_product
-        self.delete_product(old_product.name)
-        self.save_product(new_product)
+
+        temp_list = self._get_products_list()
+
+        for idx, product in enumerate(temp_list):
+            if product['name'] == old_product.name:
+                temp_list[idx] = new_product.to_dict()
+                self._push_products_list(temp_list)
         return True
 
     def delete_product(self, product_name: str):
