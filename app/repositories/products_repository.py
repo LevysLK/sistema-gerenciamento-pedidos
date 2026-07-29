@@ -75,4 +75,4 @@ class ProductsRepository:
         for product in temp_list:
             if product_name.lower() == product['name']:
                 return Product.from_dict(product)
-        raise KeyError('PRODUTOREPOSITORY_BUSCAR: Produto não encontrado.')
+        return False

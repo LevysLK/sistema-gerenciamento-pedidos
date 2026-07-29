@@ -35,23 +35,29 @@ class OrderService:
     def delete_product(self, product: Product):
         self._prod_rep.delete_product(product.name)
 
-    def edit_product(self, product: Product, changes: dict):
+    def edit_product(self, product_on_system: Product, changes: dict):
         """
         Edita o campo selecionado do produto em questão.
-            changes: dict contendo 'name', 'price' ou ambos.
+        Args:
+            changes: 
+                dict contendo as chaves 'name', 'price' ou ('name', 'price').
+            product_on_system: 
+                Produto (objeto) encontrado no sistema.
         Returns:
-            False: caso o novo nome já exista no sistema.
+            False: caso os valores de alteração forem iguais aos que já estão no sistema.
         """
-        new_product = Product(product.name, product.price)
+        new_product = Product(product_on_system.name, product_on_system.price)
         for key, value in changes.items():
             setattr(new_product, key, value)
 
-        try:
-            on_system_product = self._prod_rep.find_product(new_product.name)
-            if on_system_product.name == new_product.name:
-                return False
-        except KeyError:
-            self._prod_rep.replace_product(product, new_product)
+        if (
+            'name' in changes and new_product.name == product_on_system.name
+        ) or (
+            'price' in changes and new_product.price == product_on_system.price
+        ):
+            return False
+
+        self._prod_rep.replace_product(product_on_system, new_product)
 
 
     #ORDERS ACTIONS
