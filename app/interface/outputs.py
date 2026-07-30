@@ -57,12 +57,11 @@ def show_order_details(order: Order):
         - Forma de pagamento.
         - Valor total do pedido.
     """
-    payment_met = f'Forma de pagamento: "{order.payment_method}"'
     summary_itens, total = order.summary() if order.itens else (None, 0)
     print(f'Resumo do pedido nº{order.order_n}')
     print(
     f'Data: {order.data}',
-    f'Cliente: {order.customer.name.capitalize()}, Contato: {order.customer.email!r}',
+    f'Cliente: {order.customer.name.capitalize()}, Contato: "{order.customer.email}"',
     sep='\n'
     )
 
@@ -78,8 +77,8 @@ def show_order_details(order: Order):
         print(f'>>> Pedido está vazio <<<')
 
     print(
-        f'Status do pedido: {order.order_status!r}',
-        f'{payment_met if order.order_status not in ('aberto', 'cancelado') else ''}',
+        f'Status do pedido: "{order.order_status}"',
+        f'Forma de pagamento: "{order.payment_method if order.payment_defined else "Não definida"}"',
         f'Total do pedido: R${total:.2f}',
         sep='\n',
      )
