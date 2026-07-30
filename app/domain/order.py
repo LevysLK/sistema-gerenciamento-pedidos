@@ -19,6 +19,7 @@ class Order:
         self._itens = {}
         self._order_status = 'aberto'
         self.payment_method = PaymentNotDefined()
+        self._payment_defined = False
         self.order_n = get_next_order_n_act()
 
     def __repr__(self):
@@ -39,6 +40,14 @@ class Order:
     @order_status.setter
     def order_status(self, value):
         self._order_status = value
+
+    @property
+    def payment_defined(self):
+        return self._payment_defined
+
+    @payment_defined.setter
+    def payment_defined(self, value):
+        self._payment_defined = value
 
     #BUSINESS METHODS
     def add_item(self, item: OrderItem):
@@ -112,17 +121,18 @@ class Order:
         if not isinstance(payment_method, PaymentMethod):
             raise ValueError('PEDIDOFORMAPGTO: Forma de pagamento deve ser instância de PaymentMethod.')
         self.payment_method = payment_method
+        self.payment_defined = True
 
     def complete_order(self):
         if self.order_status == 'cancelado':
             raise ValueError('PEDIDOFINALIZAR: Pedido cancelado.')
         if self.order_status == 'finalizado':
             raise ValueError('PEDIDOFINALIZAR: Pedido já está finalizado.')
-        if self.payment_method is None:
-            raise ValueError('PEDIDOFINALIZAR: Forma de pagamento inválida.')
+        if not self.payment_defined:
+            raise ValueError('PEDIDOFINALIZAR: Forma de pagamento não definida.')
         if not self.itens:
             raise ValueError('PEDIDOFINALIZAR: Lista de produtos vazia.')
-        if not self.total_calculate() > 0:
+        if self.total_calculate() <= 0:
             raise ValueError('PEDIDOFINALIZAR: Valor do pedido não pode ser zero ou negativo.')
 
         if self.payment_method.pay():
@@ -148,6 +158,7 @@ class Order:
             'data': self.data,
             'order_status': self.order_status,
             'payment_method': self.payment_method.to_dict(),
+            'payment_defined': self.payment_defined,
             'order_n': self.order_n
         }
 
@@ -159,6 +170,7 @@ class Order:
             order._itens[item['product']['name']] =  OrderItem.from_dict({'product': item['product'], 'qtty': item['qtty']})
         order.order_status = dict_['order_status']
         order.payment_method = PaymentMethod.from_dict(dict_['payment_method'])
+        order.payment_defined = dict_['payment_defined']
         order.order_n = dict_['order_n']
         order.data = dict_['data']
         return order
