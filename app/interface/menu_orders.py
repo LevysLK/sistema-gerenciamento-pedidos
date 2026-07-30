@@ -2,6 +2,7 @@ from .outputs import *
 from .inputs import *
 from ..domain import Order
 from ..services.orderservice import OrderService
+from ..config.configs import STATUS_CANCELED, STATUS_COMPLETED, STATUS_OPEN
 import os
 
     #ORDERS MENU
@@ -55,8 +56,8 @@ class SubMenuOrders:
         else:
             order = self.service.find_order(self.current_order)
 
-        if order.order_status in ('finalizado', 'cancelado'):
-            show_order_error('cancelado')
+        if order.order_status in (STATUS_COMPLETED, STATUS_CANCELED):
+            show_order_error(STATUS_CANCELED)
             return
 
         print(
@@ -98,7 +99,7 @@ class SubMenuOrders:
         print('REMOVENDO ITENS DO PEDIDO')
         order_n = ask_order_number()
         order = self.service.find_order(order_n)
-        if order.order_status in ('finalizado', 'cancelado'):
+        if order.order_status in (STATUS_COMPLETED, STATUS_CANCELED):
             show_order_error(order.order_status)
             return
 
@@ -153,7 +154,7 @@ class SubMenuOrders:
         order_n = ask_order_number()
 
         order = self.service.find_order(order_n)
-        if order.order_status in ('finalizado', 'cancelado'):
+        if order.order_status in (STATUS_COMPLETED, STATUS_CANCELED):
             show_order_error(order.order_status)
             return
 
@@ -194,7 +195,7 @@ class SubMenuOrders:
         order_n = ask_order_number()
         
         order = self.service.find_order(order_n)
-        if order.order_status in ('finalizado', 'cancelado'):
+        if order.order_status in (STATUS_COMPLETED, STATUS_CANCELED):
             show_order_error(order.order_status)
             return
 

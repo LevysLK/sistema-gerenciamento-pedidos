@@ -2,6 +2,7 @@ from .customer import Customer
 from .orderitem import OrderItem
 from .paymentmethod import PaymentMethod, PaymentNotDefined
 from app.utils import get_next_order_n_act
+from app.config.configs import ALLOWED_ORDER_STATUSES, STATUS_CANCELED, STATUS_OPEN, STATUS_COMPLETED
 from datetime import datetime
 
 class Order:
@@ -17,8 +18,8 @@ class Order:
             self.data = f'{datetime.now():%d-%m-%Y}'
         self.customer = customer
         self._itens = {}
-        self._order_status = 'aberto'
-        self.payment_method = PaymentNotDefined()
+        self._order_status = STATUS_OPEN
+        self._payment_method = PaymentNotDefined()
         self._payment_defined = False
         self.order_n = get_next_order_n_act()
 
@@ -34,11 +35,23 @@ class Order:
         return self._itens
 
     @property
+    def payment_method(self):
+        return self._payment_method
+
+    @payment_method.setter
+    def payment_method(self, value):
+        if not isinstance(value, PaymentMethod):
+            raise TypeError('PAYMENTMETHOD_SETTER: Forma de pagamento inválida.')
+        self._payment_method = value
+
+    @property
     def order_status(self):
         return self._order_status
 
     @order_status.setter
     def order_status(self, value):
+        if value not in ALLOWED_ORDER_STATUSES:
+            raise ValueError('ORDERSTATUS_SETTER: Status inválido.')
         self._order_status = value
 
     @property
@@ -47,13 +60,15 @@ class Order:
 
     @payment_defined.setter
     def payment_defined(self, value):
+        if not isinstance(value, bool):
+            raise TypeError('PAYMENTDEFINED_SETTER: Valor inválido.')
         self._payment_defined = value
 
     #BUSINESS METHODS
     def add_item(self, item: OrderItem):
-        if self.order_status == 'cancelado':
+        if self.order_status == STATUS_CANCELED:
             raise ValueError('PEDIDOADD: Pedido cancelado.')
-        if self.order_status == 'finalizado':
+        if self.order_status == STATUS_COMPLETED:
             raise ValueError('PEDIDOADD: Pedido já foi finalizado.')
         if not isinstance(item, OrderItem):
             raise ValueError('PEDIDOADD: Item deve ser instância de ItemPedido')
@@ -64,9 +79,9 @@ class Order:
         self._itens[item.name] = item
 
     def del_item(self, item_name: str):
-        if self.order_status == 'cancelado':
+        if self.order_status == STATUS_CANCELED:
             raise ValueError('PEDIDODEL: Pedido cancelado.')
-        if self.order_status == 'finalizado':
+        if self.order_status == STATUS_COMPLETED:
             raise ValueError('PEDIDODEL: Pedido já foi finalizado.')
         if not self.itens:
             raise ValueError('PEDIDODEL: Lista de produtos vazia.')
@@ -111,9 +126,9 @@ class Order:
         return (rtn, self.total_calculate())
 
     def set_payment_method(self, payment_method: PaymentMethod):
-        if self.order_status == 'cancelado':
+        if self.order_status == STATUS_CANCELED:
             raise ValueError('PEDIDOFORMAPGTO: Pedido cancelado.')
-        if self.order_status == 'finalizado':
+        if self.order_status == STATUS_COMPLETED:
             raise ValueError('PEDIDOFORMAPGTO: Pedido já foi finalizado.')
         if not self.itens:
             raise ValueError('PEDIDOFORMAPGTO: Lista de produtos vazia.')
@@ -124,9 +139,9 @@ class Order:
         self.payment_defined = True
 
     def complete_order(self):
-        if self.order_status == 'cancelado':
+        if self.order_status == STATUS_CANCELED:
             raise ValueError('PEDIDOFINALIZAR: Pedido cancelado.')
-        if self.order_status == 'finalizado':
+        if self.order_status == STATUS_COMPLETED:
             raise ValueError('PEDIDOFINALIZAR: Pedido já está finalizado.')
         if not self.payment_defined:
             raise ValueError('PEDIDOFINALIZAR: Forma de pagamento não definida.')
@@ -136,16 +151,16 @@ class Order:
             raise ValueError('PEDIDOFINALIZAR: Valor do pedido não pode ser zero ou negativo.')
 
         if self.payment_method.pay():
-            self.order_status = 'finalizado'
+            self.order_status = STATUS_COMPLETED
             return True
         raise ValueError(f'PEDIDOFINALIZAR: Erro ao efetuar pagamento por {self.payment_method.name}.')
     
     def cancel_order(self):
-        if self.order_status == 'cancelado':
+        if self.order_status == STATUS_CANCELED:
             raise ValueError('PEDIDOCANCEL: Pedido já está cancelado.')
-        if self.order_status == 'finalizado':
+        if self.order_status == STATUS_COMPLETED:
             raise ValueError('PEDIDOCANCEL: Pedido já foi finalizado.')
-        self.order_status = 'cancelado'
+        self.order_status = STATUS_CANCELED
 
     def to_dict(self) -> dict:
         itens_dict = {}
