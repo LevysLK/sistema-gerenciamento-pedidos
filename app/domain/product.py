@@ -28,7 +28,8 @@ class Product:
     #BUSINESS METHODS
     @classmethod
     def from_dict(cls, dict_: dict) -> Product:
-        name, price = dict_.values()
+        name = dict_['name']
+        price = dict_['price']
         return cls(name, price)
 
     def to_dict(self) -> dict:

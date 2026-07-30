@@ -27,5 +27,6 @@ class Customer:
 
     @classmethod
     def from_dict(cls, dict_: dict) -> Customer:
-        name, email = dict_.values()
+        name = dict_['name']
+        email = dict_['email']
         return cls(name, email)
