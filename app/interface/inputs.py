@@ -5,7 +5,7 @@ def ask_customer_name() -> str | None:
      """
      Returns:
           str: nome do cliente em letras minúsculas.
-          None: caso a entrada seja inválida.
+          None: caso a entrada seja vazia.
      """
      name = input('Qual o nome do cliente? ').strip()
 
@@ -17,7 +17,7 @@ def ask_customer_email() -> str | None:
      """
      Returns:
           str: email válido em letras minúsculas.
-          None: caso a entrada seja inválida.
+          None: caso a entrada seja vazia.
      """
      email = input('Qual o email do cliente? ').strip()
      if not email:
@@ -71,7 +71,7 @@ def ask_product_name() -> str | None:
      """
      Returns:
           str: nome do produto em letras minúsculas.
-          None: caso a entrada seja inválida.
+          None: caso a entrada seja vazia.
      """
      name = input('Qual o nome do produto? ').strip()
 
