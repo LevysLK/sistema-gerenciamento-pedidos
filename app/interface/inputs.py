@@ -174,7 +174,7 @@ def ask_confirm_payment() -> str | None:
 def ask_menu_choose() -> str:
      return str(input('Escolha uma opção: ').strip())
 
-def ask_press_any_key_to_continue():
-     return input('Aperte qualquer tecla para continuar...')
+def ask_press_enter_to_continue():
+     return input('Tecle ENTER para continuar...')
 
 

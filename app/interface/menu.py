@@ -136,5 +136,5 @@ class Menu:
                 continue
             else:
                 menu_options[menu_key_choosed]['action']()
-                time.sleep(1)
+                time.sleep(1.5)
                 continue

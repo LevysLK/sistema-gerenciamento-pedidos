@@ -5,7 +5,7 @@ from app.interface.menu import Menu
 
 #GENERAL INPUTS FOR JSON USE
 from app.utils.json_handler import check_temp_files
-from app.interface.inputs import ask_press_any_key_to_continue
+from app.interface.inputs import ask_press_enter_to_continue
 
 order_repositiry = OrderRepository()
 products_repository = ProductsRepository()
@@ -18,6 +18,6 @@ if temp_files:
     for item in temp_files:
         print(item)
     print()
-    ask_press_any_key_to_continue()
+    ask_press_enter_to_continue()
 
 menu.execute()

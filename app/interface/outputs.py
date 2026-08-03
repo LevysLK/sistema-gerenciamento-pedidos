@@ -170,7 +170,7 @@ def show_all_payment_methods(payment_methods: dict[str, PaymentMethod]):
         print(f'{key} - {value}')
 
 def show_success_set_payment_method():
-    return print(f'Forma de pagamento selecionada com sucesso!')
+    return print(f'Forma de pagamento definida com sucesso!')
 
 def show_fail_payment_set():
     return print(f'Erro ao definir forma de pagamento!')
