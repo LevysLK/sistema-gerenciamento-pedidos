@@ -14,7 +14,7 @@ class OrderRepository:
     @staticmethod
     def export_order(order: Order):
         order_n = order.order_n
-        json_handler.save_to(paths.EXPORT_PRODUCT_JASON/f'order_{order_n}_export.json', order.to_dict())
+        json_handler.save_to(paths.EXPORT_ORDER_JASON/f'order_{order_n}_export.json', order.to_dict())
 
     @staticmethod
     def _push_orders_list(orders_list: list[dict]):
