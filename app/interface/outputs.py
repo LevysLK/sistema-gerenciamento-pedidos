@@ -1,8 +1,20 @@
 from ..domain import Product, Order, PaymentMethod
 
 #ORDERS OUTPUTS
+def show_empty_orders_rep():
+    return print(f'Não há pedidos cadastrados.')
+
 def show_not_find_order():
      return print('Pedido não encontrado.')
+
+def show_fail_to_complete_order(error_type):
+    """
+    Exibe a mensagem 'Erro ao concluir pedido:' seguida do texto complementar.
+
+    Args:
+        error_type: tipo de erro extraído com 'exception as error'.
+    """
+    return print(f'Erro ao concluir pedido: {error_type}')
 
 def show_success_order_cancel():
     return print(f'Pedido cancelado com sucesso!')
@@ -159,6 +171,9 @@ def show_all_payment_methods(payment_methods: dict[str, PaymentMethod]):
 
 def show_success_set_payment_method():
     return print(f'Forma de pagamento selecionada com sucesso!')
+
+def show_fail_payment_set():
+    return print(f'Erro ao definir forma de pagamento!')
 
 
 #GENERAL OUTPUTS
