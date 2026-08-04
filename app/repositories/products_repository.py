@@ -70,9 +70,9 @@ class ProductsRepository:
             False: caso não encontre o produto pedido.
         """
         if not product_name:
-            return False
+            raise KeyError('PRODUTOREPOSITORY_BUSCAR: Nome do produto inválido.')
         temp_list = self._get_products_list()
         for product in temp_list:
             if product_name.lower() == product['name']:
                 return Product.from_dict(product)
-        return False
+        raise KeyError('PRODUTOREPOSITORY_BUSCAR: Produto não encontrado.')

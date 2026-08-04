@@ -34,9 +34,13 @@ class SubMenuOrders:
                 continue
             break
 
-        if inpt_choose == '1':
-            self.current_order = order_number
-        return
+        if inpt_choose == '2':
+            show_abort_operation()
+            return
+
+        self.current_order = order_number
+
+
 
     def add_item(self):
         os.system('cls')
@@ -88,11 +92,10 @@ class SubMenuOrders:
                     continue
                 break
 
-            if inpt_choose == '1':
-                continue
-
-            show_abort_operation()
-            return
+            if inpt_choose == '2':
+                self.current_order = None
+                show_abort_operation()
+                return
 
     def remove_item(self):
         os.system('cls')
@@ -106,20 +109,32 @@ class SubMenuOrders:
         if not order.itens:
             show_empty_products_rep()
             return
-
         show_order_items_list(order)
 
-        item_name = ask_product_name()
-        if item_name in order.itens:
-            if ask_confirm_product_deletion(item_name) == '1':
-                self.service.remove_item(order, item_name)
-                show_success_item_remove()
+        while True:
+            item_name = ask_product_name()
+            if not item_name:
+                show_invalid_input()
+                continue
 
-                ask_press_any_key_to_continue()
-                return
+            if item_name not in order.itens:
+                show_invalid_input()
+                continue
+            break
+
+        while True:
+            confirm_del = ask_confirm_product_deletion(item_name)
+            if not confirm_del:
+                show_invalid_input()
+                continue
+            break
+            
+        if  confirm_del == '2':
             show_abort_operation()
             return
-        show_invalid_input()
+
+        self.service.remove_item(order, item_name)
+        show_success_item_remove()
 
     def find_order(self):
         os.system('cls')
@@ -134,9 +149,14 @@ class SubMenuOrders:
     def list_orders(self):
         os.system('cls')
         print('LISTANDO TODOS OS PEDIDOS NO SISTEMA')
-        show_all_orders(self.service.list_all_orders())
-        ask_press_any_key_to_continue()
-        return
+
+        try:
+            show_all_orders(self.service.list_all_orders())
+        except FileNotFoundError:
+            show_empty_orders_rep()
+            return
+
+        ask_press_enter_to_continue()
 
     def export_order(self):
         os.system('cls')
@@ -158,21 +178,31 @@ class SubMenuOrders:
             show_order_error(order.order_status)
             return
 
+        print()
         show_order_details(order)
         print()
 
         pay_methods = self.service.list_all_payment_methods()
         show_all_payment_methods(pay_methods)
-        menu_n = ask_menu_choose()
-        if menu_n not in pay_methods:
-            show_invalid_input()
-            return
+
+        while True:
+            menu_n = ask_menu_choose()
+            if menu_n not in pay_methods:
+                show_invalid_input()
+                continue
+            break
 
         pay_choose = pay_methods[menu_n]
 
-        order = self.service.set_payment_method(order, pay_choose)
+        try:
+            order = self.service.set_payment_method(order, pay_choose)
+        except ValueError:
+            show_fail_payment_set()
+            return
+
         print(f'Forma de pagamento selecionada: {pay_choose}')
         show_success_set_payment_method()
+        print()
         
         while True:
             inpt_choose = ask_confirm_payment()
@@ -181,13 +211,20 @@ class SubMenuOrders:
                 continue
             break
 
-        if inpt_choose == '1':
-            if self.service.complete_order(order) is True:
+        if inpt_choose == '2':
+            show_abort_operation()
+            return
+
+        try:
+            order_complete = self.service.complete_order(order)
+            if order_complete:
                 show_success_complete_order()
-                ask_press_any_key_to_continue()
-                return
-        show_abort_operation()
-        return
+                ask_press_enter_to_continue()
+        except Exception as error:
+            show_fail_to_complete_order(error)
+            ask_press_enter_to_continue()
+            return
+
 
     def cancel_order(self):
         os.system('cls')

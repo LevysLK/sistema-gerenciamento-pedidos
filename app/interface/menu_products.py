@@ -30,15 +30,18 @@ class SubMenuProducts:
         os.system('cls')
         print('REMOVENDO PRODUTO DO SISTEMA')
         product_name = ask_product_name()
-        product = self.service.find_product(product_name)
-        if not product:
-            show_invalid_input()
+        try:
+            product = self.service.find_product(product_name)
+        except KeyError:
+            show_not_found_product()
             return
 
-        inpt_choose = ask_confirm_product_deletion(product.name)
-        if not inpt_choose:
-            show_invalid_input()
-            return
+        while True:
+            inpt_choose = ask_confirm_product_deletion(product.name)
+            if not inpt_choose:
+                show_invalid_input()
+                continue
+            break
 
         if inpt_choose == '2':
             show_abort_operation()
@@ -46,24 +49,33 @@ class SubMenuProducts:
 
         self.service.delete_product(product)
         show_success_product_deletion()
-        ask_press_any_key_to_continue()
+        ask_press_enter_to_continue()
 
     def edit_product(self):
         os.system('cls')
         print('EDITANDO PRODUTO')
+
         product_name = ask_product_name()
-        product = self.service.find_product(product_name)
+        if not product_name:
+            show_invalid_input()
+            return
+
+        try:
+            product = self.service.find_product(product_name)
+        except KeyError:
+            show_not_found_product()
+            return
 
         show_product_details(product)
 
         changes = {}
         for act_name, act in ask_field_to_edit():
-            if act is False: #False representa a opção de cancelar edição
+            if not act: #False representa a opção de cancelar edição
                 show_abort_operation()
                 return
             changes[act_name] = act()
 
-        if self.service.edit_product(product, changes) is False:
+        if not self.service.edit_product(product, changes):
             show_product_already_exists()
             return
         show_success_product_update()
@@ -73,4 +85,4 @@ class SubMenuProducts:
         print('LISTANDO TODOS OS PRODUTOS DO SISTEMA')
         show_products_list(self.service.list_products())
 
-        ask_press_any_key_to_continue()
+        ask_press_enter_to_continue()

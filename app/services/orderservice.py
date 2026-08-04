@@ -102,10 +102,11 @@ class OrderService:
         self._order_rep.replace_order(order)
 
     def complete_order(self, order: Order) -> bool:
-        if order.complete_order() is True:
-            self._order_rep.replace_order(order)
-            return True
-        return False
+        if not order.complete_order():
+            return False
+
+        self._order_rep.replace_order(order)
+        return True
 
 
     #PAYMENT ACTIONS
