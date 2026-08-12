@@ -4,6 +4,8 @@ from .paymentmethod import PaymentMethod, PaymentNotDefined
 from app.utils import get_next_order_n_act
 from app.config.configs import ALLOWED_ORDER_STATUSES, STATUS_CANCELED, STATUS_OPEN, STATUS_COMPLETED
 from datetime import datetime
+from types import MappingProxyType
+from collections.abc import Mapping
 
 class Order:
     """
@@ -31,8 +33,8 @@ class Order:
 
     #PROPERTIES
     @property
-    def itens(self):
-        return self._itens
+    def itens(self) -> Mapping[str, OrderItem]:
+        return MappingProxyType(self._itens)
 
     @property
     def payment_method(self):
