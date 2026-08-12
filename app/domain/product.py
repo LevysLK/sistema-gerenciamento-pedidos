@@ -20,7 +20,7 @@ class Product:
         return self._price
     @price.setter
     def price(self, value):
-        value = check_and_convert_number_to_float(value, self.__class__)
+        value = check_and_convert_number_to_float(value)
         if value <= 0:
             raise ValueError('PRODUTO: Valor inválido.')
         self._price = value
