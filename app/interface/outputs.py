@@ -4,7 +4,7 @@ from ..domain import Product, Order, PaymentMethod
 def show_empty_orders_rep():
     return print(f'Não há pedidos cadastrados.')
 
-def show_not_find_order():
+def show_not_found_order():
      return print('Pedido não encontrado.')
 
 def show_fail_to_complete_order(error_type):
@@ -116,7 +116,7 @@ def show_success_complete_order():
 
 
 #PRODUCTS OUTPUTS
-def show_not_find_product():
+def show_not_found_product():
      return print('Produto não encontrado.')
 
 def show_product_already_exists():
