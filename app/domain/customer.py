@@ -7,10 +7,33 @@ class Customer:
         name = name.strip()
         if not name:
             raise ValueError('CLIENTE: Nome inválido.')
+        if len(name) < 3:
+            raise ValueError('CLIENTE: Nome inválido.')
+        if any(
+            char in ('.', ',', '-', '/', '\\', '|', '_', '*', '+')
+            or char.isdigit()
+            for char in name
+        ):
+            raise ValueError('CLIENTE: Nome inválido.')
 
         email = email.strip()
-        if email.count('.') < 1 or email.count('@') != 1 or len(email) < 8:
-            raise ValueError('CLIENTE: e-mail inválido.')
+
+        if (
+            len(email) < 8
+            or email.count("@") != 1
+            or " " in email
+        ):
+            raise ValueError("CLIENTE: e-mail inválido.")
+
+        user, domain = email.split("@")
+
+        if (
+            not user
+            or "." not in domain
+            or domain.startswith(".")
+            or domain.endswith(".")
+        ):
+            raise ValueError("CLIENTE: e-mail inválido.")
 
         self.name = name.lower()
         self.email = email.lower()
