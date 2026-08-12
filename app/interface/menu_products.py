@@ -1,6 +1,7 @@
 from .outputs import *
 from .inputs import *
 from ..services.orderservice import OrderService
+from ..utils.ask_until_valid import ask_until_valid
 import os
 
     #PRODUCTS MENU
@@ -12,6 +13,14 @@ class SubMenuProducts:
     def __init__(self, service: OrderService):
         self.service = service
 
+    def _find_product_or_show_error(self, product_name: str) -> Product | None:
+        try:
+            return self.service.find_product(product_name)
+        except (KeyError, ValueError):
+            show_not_found_product()
+        except FileNotFoundError:
+            show_empty_products_rep()
+        return None
 
     def create_product(self):
         os.system('cls')
@@ -21,12 +30,19 @@ class SubMenuProducts:
             show_invalid_input()
             return
 
-        self.service.create_product({'name': prod_name, 'price': prod_price})
+        prod_price = ask_until_valid(ask_product_price, ValueError, show_invalid_input)
+
+        self.service.create_product({'name': product_name, 'price': prod_price})
         show_success_product_create()
         return
 
     def delete_product(self):
         os.system('cls')
+        if not self.service.check_empty_products_rep():
+            show_empty_products_rep()
+            return
+
+
         print('REMOVENDO PRODUTO DO SISTEMA')
         product_name = ask_product_name()
         if product_name is None:
@@ -54,6 +70,10 @@ class SubMenuProducts:
 
     def edit_product(self):
         os.system('cls')
+        if not self.service.check_empty_products_rep():
+            show_empty_products_rep()
+            return
+
         print('EDITANDO PRODUTO')
 
         product_name = ask_product_name()
@@ -61,10 +81,8 @@ class SubMenuProducts:
                     show_invalid_input()
                     return
 
-        try:
-            product = self.service.find_product(product_name)
-        except KeyError:
-            show_not_found_product()
+        product = self._find_product_or_show_error(product_name)
+        if product is None:
             return
 
         show_product_details(product)
@@ -83,6 +101,10 @@ class SubMenuProducts:
 
     def list_products(self):
         os.system('cls')
+        if not self.service.check_empty_products_rep():
+            show_empty_products_rep()
+            return
+
         print('LISTANDO TODOS OS PRODUTOS DO SISTEMA')
         show_products_list(self.service.list_products())
 

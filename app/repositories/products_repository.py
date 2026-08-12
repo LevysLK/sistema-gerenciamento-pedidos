@@ -26,6 +26,19 @@ class ProductsRepository:
                 raise FileNotFoundError('Não há produtos salvos.')
         return temp_list
 
+    def check_empty_product_repository(self) -> bool:
+        """
+        Acessa diretamente o arquivo onde os produtos estão cadastrados.
+        Returns:
+            True: caso haja produtos cadastrados.
+            False: caso não haja produtos cadastrados.
+        """
+        try:
+            self._get_products_list()
+        except FileNotFoundError:
+            return False
+        return True
+
     def save_product(self, product: Product):
         if not isinstance(product, Product):
             raise ValueError('PRODUTOREPOSITORY_SALVAR: Produto deve ser instância de Produto')
@@ -55,19 +68,31 @@ class ProductsRepository:
         temp_list = self._get_products_list()
         for idx, product in enumerate(temp_list):
             if product_name.lower() == product['name']:
-                del temp_list[idx]
-                self._push_products_list(temp_list)
+                if len(temp_list) > 1:
+                    del temp_list[idx]
+                    self._push_products_list(temp_list)
+                    return True
+                paths.REPOSITORY_PRODUCTS_JSON.unlink(missing_ok=True)
                 return True
         raise KeyError('PRODUTOREPOSITORY_DELETAR: Produto não encontrado.')
 
     def list_products(self) -> list[dict]:
+        """
+        Acessa diretamente o arquivo onde os produtos estão cadastrados.
+        Returns:
+            list[dict]: lista de dicionários contendo todos os produtos no sistema.
+        Raises:
+            FileNotFoundError: caso não haja produtos cadastrados no sistema.
+        """
         return self._get_products_list()
 
-    def find_product(self, product_name: str) -> Product | bool:
+    def find_product(self, product_name: str) -> Product:
         """
+        Acessa diretamente o arquivo onde os produtos estão cadastrados.
         Returns:
             Product: objeto Product encontrado no sistema.
-            False: caso não encontre o produto pedido.
+        Raises:
+            KeyError: caso o produto não seja encontrado.
         """
         if not product_name:
             raise KeyError('PRODUTOREPOSITORY_BUSCAR: Nome do produto inválido.')

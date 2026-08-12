@@ -26,10 +26,33 @@ class OrderService:
         self._prod_rep.save_product(product)
         return True
 
+    def check_empty_products_rep(self) -> bool:
+        """
+        Checa se há produtos cadastrados no sistema.
+        Returns:
+            True: caso haja produtos cadastrados.
+            False: caso não haja produtos cadastrados.
+        """
+        return self._prod_rep.check_empty_product_repository()
+
     def find_product(self, product_name: str) -> Product:
+        """
+        Busca o product_name no repositório de produtos.
+        Returns:
+            Product: objeto Product encontrado no sistema.
+        Raises:
+            KeyError: caso o produto não seja encontrado.
+        """
         return self._prod_rep.find_product(product_name)
 
     def list_products(self) -> list[dict]:
+        """
+        Lista todos os produtos cadastrados no sistema.
+        Returns:
+            list[dict]: lista de dicionários contendo todos os produtos no sistema.
+        Raises:
+            FileNotFoundError: caso não haja produtos cadastrados no sistema.
+        """
         return self._prod_rep.list_products()
     
     def delete_product(self, product: Product):
@@ -76,7 +99,23 @@ class OrderService:
         order_number = order.order_n
         return order_number
 
+    def check_empty_orders_rep(self) -> bool:
+        """
+        Checa se há pedidos salvos no sistema.
+        Returns:
+            True: caso haja pedidos salvos.
+            False: caso não haja pedidos salvos.
+        """
+        return self._order_rep.check_empty_orders_repository()
+
     def find_order(self, order_n: int) -> Order:
+        """
+        Busca o order_n no repositório de pedidos.
+        Returns:
+            Order: objeto Order encontrado no sistema.
+        Raises:
+            KeyError: caso o pedido não seja encontrado.
+        """
         return self._order_rep.find_order(order_n)
 
     def add_item(self, product: Product, qtty: int, order: Order):
@@ -91,6 +130,13 @@ class OrderService:
         self._order_rep.replace_order(order)
 
     def list_all_orders(self) -> list[dict]:
+        """
+        Lista todos os pedidos salvos no sistema.
+        Returns:
+            list[dict]: lista de dicionários contendo todos os pedidos no sistema.
+        Raises:
+            FileNotFoundError: caso não haja pedidos salvos no sistema.
+        """
         orders_list = self._order_rep.list_orders()
         return orders_list
 

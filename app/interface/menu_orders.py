@@ -1,6 +1,7 @@
+from collections.abc import Callable
 from .outputs import *
 from .inputs import *
-from ..domain import Order
+from ..utils.ask_until_valid import ask_until_valid
 from ..services.orderservice import OrderService
 from ..config.configs import STATUS_CANCELED, STATUS_COMPLETED, STATUS_OPEN
 import os
@@ -14,6 +15,14 @@ class SubMenuOrders:
         self.service = service
         self.current_order = None
 
+    def _find_order_or_show_error(self, order_n: int) -> Order | None:
+        try:
+            return self.service.find_order(order_n)
+        except (KeyError, ValueError):
+            show_not_found_order()
+        except FileNotFoundError:
+            show_empty_orders_rep()
+        return None
 
     def create_order(self):
         os.system('cls')
@@ -45,16 +54,20 @@ class SubMenuOrders:
     def add_item(self):
         os.system('cls')
         print('ADICIONANDO ITENS AO PEDIDO')
-        products_list = self.service.list_products()
-        if not products_list:
+        if not self.service.check_empty_products_rep():
             show_empty_products_rep()
             return
 
+        products_list = self.service.list_products()
+
         if self.current_order is None:
-            order_n = ask_order_number()
-            order = self.service.find_order(order_n)
-            if not isinstance(order, Order):
-                show_not_find_order()
+            order_n = ask_until_valid(ask_order_number, ValueError, show_invalid_input)
+            order = self._find_order_or_show_error(order_n)
+            if not order:
+                return
+
+            if order.order_status in (STATUS_COMPLETED, STATUS_CANCELED):
+                show_order_error(STATUS_CANCELED)
                 return
             self.current_order = order_n
         else:
@@ -78,7 +91,13 @@ class SubMenuOrders:
                 show_invalid_input()
                 continue
 
-            product_qtty = ask_product_qtty()
+            product_qtty = ask_until_valid(ask_product_qtty, ValueError, show_invalid_input)
+
+            try:
+                product = self.service.find_product(product_choose)
+            except KeyError:
+                show_not_found_product()
+                return
 
             self.service.add_item(product, product_qtty, order)
             show_success_add_item(product_choose)
@@ -98,8 +117,12 @@ class SubMenuOrders:
     def remove_item(self):
         os.system('cls')
         print('REMOVENDO ITENS DO PEDIDO')
-        order_n = ask_order_number()
-        order = self.service.find_order(order_n)
+
+        order_n = ask_until_valid(ask_order_number, KeyError, show_invalid_input)
+        order = self._find_order_or_show_error(order_n)
+        if not order:
+            return
+
         if order.order_status in (STATUS_COMPLETED, STATUS_CANCELED):
             show_order_error(order.order_status)
             return
@@ -137,12 +160,15 @@ class SubMenuOrders:
     def find_order(self):
         os.system('cls')
         print('BUSCANDO PEDIDO')
-        order_n = ask_order_number()
-        order = self.service.find_order(order_n)
 
+        order_n = ask_until_valid(ask_order_number, ValueError, show_invalid_input)
+        order = self._find_order_or_show_error(order_n)
+        if not order:
+            return
+
+        print()
         show_order_details(order)
-        ask_press_any_key_to_continue()
-        return
+        ask_press_enter_to_continue()
 
     def list_orders(self):
         os.system('cls')
@@ -159,9 +185,12 @@ class SubMenuOrders:
     def export_order(self):
         os.system('cls')
         print('EXPORTANDO PEDIDO')
-        order_n = ask_order_number()
 
-        order = self.service.find_order(order_n)
+        order_n = ask_until_valid(ask_order_number, ValueError, show_invalid_input)
+        order = self._find_order_or_show_error(order_n)
+        if not order:
+            return
+
         self.service.export_order(order)
         show_success_order_export(order_n)
         return
@@ -169,9 +198,12 @@ class SubMenuOrders:
     def complete_order(self):
         os.system('cls')
         print('FINALIZANDO PEDIDO')
-        order_n = ask_order_number()
 
-        order = self.service.find_order(order_n)
+        order_n = ask_until_valid(ask_order_number, ValueError, show_invalid_input)
+        order = self._find_order_or_show_error(order_n)
+        if not order:
+            return
+
         if order.order_status in (STATUS_COMPLETED, STATUS_CANCELED):
             show_order_error(order.order_status)
             return
@@ -227,9 +259,12 @@ class SubMenuOrders:
     def cancel_order(self):
         os.system('cls')
         print('CANCELANDO PEDIDO')
-        order_n = ask_order_number()
-        
-        order = self.service.find_order(order_n)
+
+        order_n = ask_until_valid(ask_order_number, ValueError, show_invalid_input)
+        order = self._find_order_or_show_error(order_n)
+        if not order:
+            return
+
         if order.order_status in (STATUS_COMPLETED, STATUS_CANCELED):
             show_order_error(order.order_status)
             return

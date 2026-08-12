@@ -31,6 +31,19 @@ class OrderRepository:
                 raise FileNotFoundError('Não há pedidos salvos.')
         return temp_list
 
+    def check_empty_orders_repository(self) -> bool:
+        """
+        Acessa diretamente o arquivo onde os pedidos estão salvos.
+        Returns:
+            True: caso haja pedidos salvos.
+            False: caso não haja pedidos salvos.
+        """
+        try:
+            self._get_orders_list()
+        except FileNotFoundError:
+            return False
+        return True
+
     def save_order(self, order: Order):
         if not isinstance(order, Order):
             raise ValueError('PEDIDOREPOSITORY_SALVAR: Pedido deve ser instância de Pedido')
@@ -43,8 +56,11 @@ class OrderRepository:
         temp_list = self._get_orders_list()
         for idx, order in enumerate(temp_list):
             if order['order_n'] == order_n:
-                del temp_list[idx]
-                self._push_orders_list(temp_list)
+                if len(temp_list) > 1:
+                    del temp_list[idx]
+                    self._push_orders_list(temp_list)
+                    return True
+                paths.REPOSITORY_ORDERS_JSON.unlink(missing_ok=True)
                 return True
         raise KeyError('PEDIDOREPOSITORY_DELETAR: Pedido não encontrado.')
 
@@ -61,6 +77,13 @@ class OrderRepository:
         return True
 
     def list_orders(self) -> list[dict]:
+        """
+        Acessa diretamente o arquivo onde os pedidos estão salvos.
+        Returns:
+            list[dict]: lista de dicionários contendo todos os pedidos no sistema.
+        Raises:
+            FileNotFoundError: caso não haja pedidos salvos no sistema.
+        """
         return self._get_orders_list()
 
     def find_order(self, order_n: int) -> Order:
