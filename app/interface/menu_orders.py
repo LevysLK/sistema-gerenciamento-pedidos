@@ -74,13 +74,11 @@ class SubMenuOrders:
 
         while True:
             product_choose = ask_product_name()
-            product_qtty = ask_product_qtty()
-
-            if not product_choose or not product_qtty:
+            if product_choose is None:
                 show_invalid_input()
                 continue
 
-            product = self.service.find_product(product_choose)
+            product_qtty = ask_product_qtty()
 
             self.service.add_item(product, product_qtty, order)
             show_success_add_item(product_choose)

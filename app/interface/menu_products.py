@@ -16,9 +16,8 @@ class SubMenuProducts:
     def create_product(self):
         os.system('cls')
         print('CADASTRANDO NOVO PRODUTO')
-        prod_name = ask_product_name()
-        prod_price = ask_product_price()
-        if not prod_name or not prod_price:
+        product_name = ask_product_name()
+        if product_name is None:
             show_invalid_input()
             return
 
@@ -30,10 +29,12 @@ class SubMenuProducts:
         os.system('cls')
         print('REMOVENDO PRODUTO DO SISTEMA')
         product_name = ask_product_name()
-        try:
-            product = self.service.find_product(product_name)
-        except KeyError:
-            show_not_found_product()
+        if product_name is None:
+            show_invalid_input()
+            return
+
+        product = self._find_product_or_show_error(product_name)
+        if product is None:
             return
 
         while True:
@@ -56,9 +57,9 @@ class SubMenuProducts:
         print('EDITANDO PRODUTO')
 
         product_name = ask_product_name()
-        if not product_name:
-            show_invalid_input()
-            return
+        if product_name is None:
+                    show_invalid_input()
+                    return
 
         try:
             product = self.service.find_product(product_name)

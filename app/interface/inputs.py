@@ -37,6 +37,8 @@ def ask_order_number() -> int | None:
      """
      number = input('Qual o o número do pedido? ').strip()
      number = check_and_convert_number_to_float(number)
+     if number is None:
+          return None
      if number <= 0:
           return None
      if number % 1 != 0:
@@ -87,6 +89,8 @@ def ask_product_price() -> float | None:
      """
      price = input('Qual o preço do produto? ').strip()
      price = check_and_convert_number_to_float(price)
+     if price is None:
+          return None
      if price <= 0:
           return None
      return price
@@ -94,6 +98,8 @@ def ask_product_price() -> float | None:
 def ask_product_qtty() -> int | None:
      qtty = input('Qual a quantidade do produto? ').strip()
      qtty = check_and_convert_number_to_float(qtty)
+     if qtty is None:
+          return None
      if qtty <= 0:
           return None
      if qtty % 1 != 0:

@@ -12,6 +12,8 @@ class OrderItem:
         self.price = product.price
 
         qtty = check_and_convert_number_to_float(qtty)
+        if qtty is None:
+            raise ValueError('ITEMPEDIDO: Quantidade inválida.')
         if qtty % 1 != 0 or qtty <= 0:
             raise ValueError('ITEMPEDIDO: Quantidade inválida.')
 

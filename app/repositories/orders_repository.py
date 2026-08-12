@@ -64,7 +64,16 @@ class OrderRepository:
         return self._get_orders_list()
 
     def find_order(self, order_n: int) -> Order:
+        """
+        Acessa diretamente o arquivo onde os pedidos estão salvos.
+        Returns:
+            Order: objeto Order encontrado no sistema.
+        Raises:
+            KeyError: caso o pedido não seja encontrado.
+        """
         order_n = check_and_convert_number_to_float(order_n)
+        if order_n is None:
+            raise KeyError('PEDIDOREPOSITORY_BUSCAR: Número de pedido inválido.')
 
         if order_n % 1 != 0:
             raise KeyError('PEDIDOREPOSITORY_BUSCAR: Número de pedido inválido.')

@@ -21,6 +21,8 @@ class Product:
     @price.setter
     def price(self, value):
         value = check_and_convert_number_to_float(value)
+        if value is None:
+            raise ValueError('PRODUTO: Valor inválido.')
         if value <= 0:
             raise ValueError('PRODUTO: Valor inválido.')
         self._price = value
