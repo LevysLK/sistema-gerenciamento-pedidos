@@ -7,9 +7,7 @@ class OrderItem:
     """
     def __init__(self, product: Product, qtty: int):
         if not isinstance(product, Product):
-            raise ValueError('ITEMPEDIDO: Produto deve ser instância de Produto.')
-        self.name = product.name
-        self.price = product.price
+            raise TypeError('ITEMPEDIDO: Produto deve ser instância de Produto.')
 
         qtty = check_and_convert_number_to_float(qtty)
         if qtty is None:
@@ -17,6 +15,8 @@ class OrderItem:
         if qtty % 1 != 0 or qtty <= 0:
             raise ValueError('ITEMPEDIDO: Quantidade inválida.')
 
+        self._name = product.name
+        self._price = product.price
         self.product = product
         self.qtty = int(qtty)
 
@@ -26,6 +26,14 @@ class OrderItem:
     @property
     def subtotal(self):
         return self.price * self.qtty
+
+    @property
+    def price(self):
+        return self._price
+
+    @property
+    def name(self):
+        return self._name
 
     #BUSINESS METHODS
     def to_dict(self) -> dict:
