@@ -12,14 +12,17 @@ class PaymentMethod(ABC):
         return self.__class__.__name__
 
     #BUSINESS METHODS
-    @staticmethod
-    def list_all_pay_methods() -> dict[str, str]:
-        temp_dict = {}
-        for idx, cls in enumerate(PaymentMethod.__subclasses__()):
-            if cls.__name__ == 'PaymentNotDefined': #Pula a exibição de pagamento não definido
-                continue
-            temp_dict[str(idx + 1)] = cls.__name__
-        return temp_dict
+    @classmethod
+    def list_all_pay_methods(cls) -> dict[str, str]:
+        temp_list = [
+            payment_class 
+            for payment_class in cls.__subclasses__()
+            if payment_class is not PaymentNotDefined
+            ]
+        return {
+            str(idx): payment_class.__name__
+            for idx, payment_class in enumerate(temp_list, 1)
+        }
 
     def to_dict(self) -> str:
         return self.name
