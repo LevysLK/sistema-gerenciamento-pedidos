@@ -5,19 +5,7 @@ class Product:
     Representa um produto disponível para venda.
     """
     def __init__(self, name: str, price: float):
-        if not name.strip():
-            raise ValueError('PRODUTO: Nome inválido.')
-
-        if len(name) < 3 or len(name) > 30:
-            raise ValueError('PRODUTO: Nome inválido.')
-
-        if any(
-            char in ('.', ',', '/', '\\', '|', '*', '+')
-            for char in name
-        ):
-            raise ValueError('CLIENTE: Nome inválido.')
-
-        self.name = name.strip().lower()
+        self.name = name
         self.price = price
 
     def __repr__(self):
@@ -35,6 +23,25 @@ class Product:
         if value <= 0:
             raise ValueError('PRODUTO: Valor inválido.')
         self._price = value
+
+    @property
+    def name(self):
+        return self._name
+    @name.setter
+    def name(self, value):
+        if not value.strip():
+            raise ValueError('PRODUTO: Nome inválido.')
+
+        if len(value) < 3 or len(value) > 30:
+            raise ValueError('PRODUTO: Nome inválido.')
+
+        if any(
+            char in ('.', ',', '/', '\\', '|', '*', '+')
+            for char in value
+        ):
+            raise ValueError('CLIENTE: Nome inválido.')
+
+        self._name = value.strip().lower()
 
     #BUSINESS METHODS
     @classmethod

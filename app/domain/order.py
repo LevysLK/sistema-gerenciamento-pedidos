@@ -15,9 +15,7 @@ class Order:
         if not isinstance(customer, Customer):
             raise ValueError('PEDIDO: Cliente deve ser instância de Cliente.')
 
-        self.data = None
-        if self.data is None:
-            self.data = f'{datetime.now():%d-%m-%Y}'
+        self.data = f'{datetime.now():%d-%m-%Y}'
         self.customer = customer
         self._itens = {}
         self._order_status = STATUS_OPEN
