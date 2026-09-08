@@ -24,11 +24,13 @@ class OrderRepository:
     def _get_orders_list(empty_ignore=False) -> list[dict]:
         try:
             temp_list = json_handler.read_from(paths.REPOSITORY_ORDERS_JSON)
-        except (FileNotFoundError, json.JSONDecodeError):
+        except FileNotFoundError:
             if empty_ignore:
                 temp_list = []
             else:
                 raise FileNotFoundError('Não há pedidos salvos.')
+        except json.JSONDecodeError as error:
+            raise RuntimeError('PEDIDOREPOSITORY: Arquivo JSON corrompido.') from error
         return temp_list
 
     def check_empty_orders_repository(self) -> bool:

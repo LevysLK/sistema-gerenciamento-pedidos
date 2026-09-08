@@ -32,3 +32,27 @@ def ask_until_valid(ask_func: Callable[[], ReturnType | None], error_types: tupl
             continue
 
         return func_rtn
+
+def show_error_if_raised(ask_func:Callable[[], ReturnType], error_types:tuple[type[Exception]], error_output:Callable[[], None]) -> ReturnType | None:
+    """
+    Tenta executar uma função e imprime erro caso levante exceção.
+
+    Args:
+        ask_func:
+            Função sem parâmetros que retorna um valor ou None.
+        error_types:
+            Tupla contendo as exceções que devem ser tratadas.
+        error_output:
+            Função responsável por exibir a mensagem de erro 
+            ao levantar exceção.
+    Returns:
+        ReturnType:
+            Valor válido retornado por ask_func.
+        None:
+            Caso levante exceção.
+    """
+    try:
+        return ask_func()
+    except error_types:
+        error_output()
+        return None

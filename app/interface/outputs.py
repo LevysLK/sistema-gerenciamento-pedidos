@@ -180,5 +180,8 @@ def show_fail_payment_set():
 def show_invalid_input():
     return print('Entrada inválida.')
 
+def corrupted_json_file():
+    return print('Arquivo JSON corrompido. Verifique antes de continuar.')
+
 def show_abort_operation():
     return print(f'Operação cancelada!')

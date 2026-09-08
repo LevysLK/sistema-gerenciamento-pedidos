@@ -1,8 +1,9 @@
 from .outputs import *
 from .inputs import *
 from ..services.orderservice import OrderService
-from ..utils.ask_until_valid import ask_until_valid
+from ..interface.helpers import ask_until_valid, show_error_if_raised
 import os
+import json
 
     #PRODUCTS MENU
 class SubMenuProducts:
@@ -38,10 +39,18 @@ class SubMenuProducts:
 
     def delete_product(self):
         os.system('cls')
-        if not self.service.check_empty_products_rep():
+        repository_status = show_error_if_raised(
+            self.service.check_empty_products_rep,
+            (RuntimeError,),
+            corrupted_json_file,
+        )
+        if repository_status is False:
             show_empty_products_rep()
             return
 
+        if repository_status is None:
+            ask_press_enter_to_continue()
+            return
 
         print('REMOVENDO PRODUTO DO SISTEMA')
         product_name = ask_product_name()
@@ -70,8 +79,17 @@ class SubMenuProducts:
 
     def edit_product(self):
         os.system('cls')
-        if not self.service.check_empty_products_rep():
+        repository_status = show_error_if_raised(
+            self.service.check_empty_products_rep,
+            (RuntimeError,),
+            corrupted_json_file,
+        )
+        if repository_status is False:
             show_empty_products_rep()
+            return
+
+        if repository_status is None:
+            ask_press_enter_to_continue()
             return
 
         print('EDITANDO PRODUTO')
@@ -101,8 +119,17 @@ class SubMenuProducts:
 
     def list_products(self):
         os.system('cls')
-        if not self.service.check_empty_products_rep():
+        repository_status = show_error_if_raised(
+            self.service.check_empty_products_rep,
+            (RuntimeError,),
+            corrupted_json_file,
+        )
+        if repository_status is False:
             show_empty_products_rep()
+            return
+
+        if repository_status is None:
+            ask_press_enter_to_continue()
             return
 
         print('LISTANDO TODOS OS PRODUTOS DO SISTEMA')

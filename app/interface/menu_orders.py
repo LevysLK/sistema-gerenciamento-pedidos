@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from .outputs import *
 from .inputs import *
-from ..utils.ask_until_valid import ask_until_valid
+from ..interface.helpers import ask_until_valid, show_error_if_raised
 from ..services.orderservice import OrderService
 from ..config.configs import STATUS_CANCELED, STATUS_COMPLETED, STATUS_OPEN
 import os
@@ -54,8 +54,17 @@ class SubMenuOrders:
     def add_item(self):
         os.system('cls')
         print('ADICIONANDO ITENS AO PEDIDO')
-        if not self.service.check_empty_products_rep():
+        repository_status = show_error_if_raised(
+            self.service.check_empty_products_rep,
+            (RuntimeError,),
+            corrupted_json_file,
+        )
+        if repository_status is False:
             show_empty_products_rep()
+            return
+
+        if repository_status is None:
+            ask_press_enter_to_continue()
             return
 
         products_list = self.service.list_products()
