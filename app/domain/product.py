@@ -8,6 +8,15 @@ class Product:
         if not name.strip():
             raise ValueError('PRODUTO: Nome inválido.')
 
+        if len(name) < 3 or len(name) > 30:
+            raise ValueError('PRODUTO: Nome inválido.')
+
+        if any(
+            char in ('.', ',', '/', '\\', '|', '*', '+')
+            for char in name
+        ):
+            raise ValueError('CLIENTE: Nome inválido.')
+
         self.name = name.strip().lower()
         self.price = price
 
