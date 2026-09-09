@@ -78,7 +78,8 @@ class OrderRepository:
             if order['order_n'] == old_order.order_n:
                 temp_list[idx] = new_order.to_dict()
                 self._push_orders_list(temp_list)
-        return True
+                return True
+        raise KeyError(f'PEDIDOREPOSITORY: Pedido {old_order.order_n!r} não encontrado.')
 
     def list_orders(self) -> list[dict]:
         """

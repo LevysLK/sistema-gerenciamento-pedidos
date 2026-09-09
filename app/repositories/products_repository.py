@@ -66,7 +66,8 @@ class ProductsRepository:
             if product['name'] == old_product.name:
                 temp_list[idx] = new_product.to_dict()
                 self._push_products_list(temp_list)
-        return True
+                return True
+        raise KeyError(f'PRODUTOREPOSITORY: Produto {old_product.name!r} não encontrado.')
 
     def delete_product(self, product_name: str):
         temp_list = self._get_products_list()
