@@ -17,7 +17,6 @@ class OrderItem:
 
         self._name = product.name
         self._price = product.price
-        self.product = product
         self._qtty = int(qtty)
 
     def __repr__(self):
@@ -42,7 +41,7 @@ class OrderItem:
     #BUSINESS METHODS
     def to_dict(self) -> dict:
         return {
-            'product': self.product.to_dict(),
+            'product': {"name": self.name, "price": self.price},
             'qtty': self.qtty
         }
 
