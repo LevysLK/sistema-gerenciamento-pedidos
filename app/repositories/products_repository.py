@@ -36,8 +36,10 @@ class ProductsRepository:
             False: caso não haja produtos cadastrados.
         """
         try:
-            self._get_products_list()
+            temp_list = self._get_products_list()
         except FileNotFoundError:
+            return False
+        if len(temp_list) < 1:
             return False
         return True
 

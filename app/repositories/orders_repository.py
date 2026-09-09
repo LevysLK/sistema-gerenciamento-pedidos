@@ -41,8 +41,10 @@ class OrderRepository:
             False: caso não haja pedidos salvos.
         """
         try:
-            self._get_orders_list()
+            temp_list = self._get_orders_list()
         except FileNotFoundError:
+            return False
+        if len(temp_list) < 1:
             return False
         return True
 
