@@ -71,7 +71,12 @@ class OrderService:
         """
         new_product = Product(product_on_system.name, product_on_system.price)
         for key, value in changes.items():
+            if key not in ('name', 'price'):
+                raise KeyError(f'ORDERSERVICE_EDIT: Chave inválida {key!r}')
             setattr(new_product, key, value)
+
+            if value is None:
+                raise ValueError(f'ORDERSERVICE_EDIT: Valor inválido para {key!r}')
 
         if (
             'name' in changes and new_product.name == product_on_system.name
