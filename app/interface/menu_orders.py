@@ -49,10 +49,11 @@ class SubMenuOrders:
 
         self.current_order = order_number
 
-
-
     def add_item(self):
         os.system('cls')
+        current_order_n = self.current_order
+        self.current_order = None
+
         print('ADICIONANDO ITENS AO PEDIDO')
         repository_status = show_error_if_raised(
             self.service.check_empty_products_rep,
@@ -69,18 +70,13 @@ class SubMenuOrders:
 
         products_list = self.service.list_products()
 
-        if self.current_order is None:
+        if current_order_n is None:
             order_n = ask_until_valid(ask_order_number, ValueError, show_invalid_input)
             order = self._find_order_or_show_error(order_n)
             if not order:
                 return
-
-            if order.order_status in (STATUS_COMPLETED, STATUS_CANCELED):
-                show_order_error(order.order_status)
-                return
-            self.current_order = order_n
         else:
-            order = self.service.find_order(self.current_order)
+            order = self._find_order_or_show_error(current_order_n)
 
         if order.order_status in (STATUS_COMPLETED, STATUS_CANCELED):
             show_order_error(order.order_status)
@@ -88,7 +84,7 @@ class SubMenuOrders:
 
         print(
             f''
-            f'ADICIONAR AO PEDIDO nº{self.current_order}:'
+            f'ADICIONAR AO PEDIDO nº{order.order_n}:'
             f'\n'
             f'Lista de produtos:'
             )
@@ -119,7 +115,6 @@ class SubMenuOrders:
                 break
 
             if inpt_choose == '2':
-                self.current_order = None
                 show_abort_operation()
                 return
 
