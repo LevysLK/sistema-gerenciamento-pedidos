@@ -76,14 +76,14 @@ class SubMenuOrders:
                 return
 
             if order.order_status in (STATUS_COMPLETED, STATUS_CANCELED):
-                show_order_error(STATUS_CANCELED)
+                show_order_error(order.order_status)
                 return
             self.current_order = order_n
         else:
             order = self.service.find_order(self.current_order)
 
         if order.order_status in (STATUS_COMPLETED, STATUS_CANCELED):
-            show_order_error(STATUS_CANCELED)
+            show_order_error(order.order_status)
             return
 
         print(
