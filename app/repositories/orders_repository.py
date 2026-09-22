@@ -50,7 +50,7 @@ class OrderRepository:
 
     def save_order(self, order: Order):
         if not isinstance(order, Order):
-            raise ValueError('PEDIDOREPOSITORY_SALVAR: Pedido deve ser instância de Pedido')
+            raise TypeError('PEDIDOREPOSITORY_SALVAR: Pedido deve ser instância de Pedido')
         temp_list = self._get_orders_list(empty_ignore=True)
         temp_list.append(order.to_dict())
         self._push_orders_list(temp_list)

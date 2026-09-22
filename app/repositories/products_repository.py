@@ -45,7 +45,7 @@ class ProductsRepository:
 
     def save_product(self, product: Product):
         if not isinstance(product, Product):
-            raise ValueError('PRODUTOREPOSITORY_SALVAR: Produto deve ser instância de Produto')
+            raise TypeError('PRODUTOREPOSITORY_SALVAR: Produto deve ser instância de Produto')
 
         temp_list = self._get_products_list(empty_ignore=True)
         for item in temp_list:

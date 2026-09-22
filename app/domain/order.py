@@ -13,7 +13,7 @@ class Order:
     """
     def __init__(self, customer: Customer):
         if not isinstance(customer, Customer):
-            raise ValueError('PEDIDO: Cliente deve ser instância de Cliente.')
+            raise TypeError('PEDIDO: Cliente deve ser instância de Cliente.')
 
         self.data = f'{datetime.now():%d-%m-%Y}'
         self.customer = customer
@@ -71,7 +71,7 @@ class Order:
         if self.order_status == STATUS_COMPLETED:
             raise ValueError('PEDIDOADD: Pedido já foi finalizado.')
         if not isinstance(item, OrderItem):
-            raise ValueError('PEDIDOADD: Item deve ser instância de ItemPedido')
+            raise TypeError('PEDIDOADD: Item deve ser instância de ItemPedido')
 
         if item.name in self._itens:
             self._itens[item.name].qtty += item.qtty
@@ -134,7 +134,7 @@ class Order:
             raise ValueError('PEDIDOFORMAPGTO: Lista de produtos vazia.')
 
         if not isinstance(payment_method, PaymentMethod):
-            raise ValueError('PEDIDOFORMAPGTO: Forma de pagamento deve ser instância de PaymentMethod.')
+            raise TypeError('PEDIDOFORMAPGTO: Forma de pagamento deve ser instância de PaymentMethod.')
         self.payment_method = payment_method
         self.payment_defined = True
 
