@@ -1,6 +1,6 @@
 # Sistema de Gerenciamento de Pedidos
 
-Desenvolvido em Python, executado via terminal e com persistência de dados em arquivos JSON.
+Sistema de gerenciamento de pedidos desenvolvido em Python, executado via terminal e com persistência de dados em arquivos JSON.
 
 Foco em organização de código, Programação Orientada a Objetos, separação de responsabilidades, tratamento de exceções, validação de dados e persistência segura.
 
@@ -10,9 +10,9 @@ Atualmente, esta versão utiliza arquivos JSON como armazenamento. Futuras vers�
 
 ## Sobre o projeto
 
-O **Sistema de Gerenciamento de Pedidos** permite controlar produtos e pedidos por meio de uma interface de terminal.
+Permite controlar produtos e pedidos por meio de uma interface de terminal.
 
-O projeto foi desenvolvido como estudo e portfólio, com o objetivo de aplicar conceitos de Python em uma aplicação completa, separando responsabilidades entre domínio, serviços, repositórios e interface.
+Desenvolvido como estudo e portfólio, com o objetivo de aplicar conceitos de Python em uma aplicação completa, separando responsabilidades entre domínio, serviços, repositórios e interface.
 
 Entre os conceitos praticados estão:
 
@@ -98,9 +98,9 @@ O sistema permite:
 
 Atualmente os dados são armazenados em arquivos JSON localizados na pasta:
 
-
+```text
 data/
-
+```
 
 A aplicação utiliza repositories para acessar e alterar os dados persistidos.
 
@@ -108,7 +108,7 @@ As demais camadas da aplicação não precisam manipular diretamente os arquivos
 
 Fluxo geral:
 
-
+```text
 Interface
     ↓
 Service
@@ -116,7 +116,7 @@ Service
 Repository
     ↓
 JSON
-
+```
 
 Essa separação permite que futuramente a persistência JSON seja substituída por um banco de dados sem exigir a reescrita completa das regras de negócio e da interface.
 
@@ -130,7 +130,7 @@ Em vez de sobrescrever diretamente o arquivo principal, os novos dados são inic
 
 Fluxo simplificado:
 
-
+```text
 dados atuais
     ↓
 arquivo .temp
@@ -138,7 +138,7 @@ arquivo .temp
 gravação concluída
     ↓
 substituição do JSON original
-
+```
 
 Caso uma falha aconteça durante a gravação, o arquivo principal não é imediatamente sobrescrito.
 
@@ -168,7 +168,7 @@ O projeto busca separar cada responsabilidade em uma camada específica.
 
 Estrutura principal:
 
-
+```text
 sistema-gerenciamento-pedidos/
 │
 ├── .gitignore
@@ -184,7 +184,7 @@ sistema-gerenciamento-pedidos/
 │   └── utils/
 │
 └── data/
-
+```
 
 ### `config`
 
@@ -266,7 +266,7 @@ Contém os arquivos utilizados para persistência dos dados do sistema.
 
 De forma simplificada:
 
-
+```text
 Usuário
   ↓
 Interface
@@ -276,11 +276,11 @@ Service
 Repository
   ↓
 JSON
-
+```
 
 No caminho inverso:
 
-
+```text
 JSON
   ↓
 Repository
@@ -290,7 +290,7 @@ Service
 Interface
   ↓
 Usuário
-
+```
 
 Cada camada possui uma responsabilidade diferente.
 
@@ -310,22 +310,29 @@ Por isso, um arquivo `requirements.txt` não é necessário enquanto não houver
 
 Clone o repositório:
 
-
-git clone https://github.com/LevysLK/sistema-gerenciamento-pedidos
-
+```bash
+git clone <URL_DO_REPOSITORIO>
+```
 
 Entre na pasta do projeto:
 
+```bash
 cd sistema-gerenciamento-pedidos
-
+```
 
 Execute:
 
+```bash
 python -u main.py
+```
 
 Também é possível utilizar:
 
+```bash
 python main.py
+```
+
+O parâmetro `-u` faz o Python utilizar saída não-bufferizada, mas não é obrigatório para o funcionamento normal da aplicação.
 
 ---
 
@@ -333,12 +340,18 @@ python main.py
 
 O ponto de entrada da aplicação é:
 
+```text
 main.py
+```
 
 A inicialização está encapsulada em uma função `main()` e protegida por:
 
+```python
 if __name__ == "__main__":
     main()
+```
+
+Isso permite importar o módulo em testes ou outros módulos sem iniciar automaticamente a interface interativa.
 
 ---
 
@@ -418,7 +431,7 @@ Uma futura versão poderá migrar a camada de persistência para banco de dados.
 
 A arquitetura atual busca facilitar uma evolução como:
 
-
+```text
 Interface
     ↓
 Service
@@ -426,7 +439,7 @@ Service
 Repository
     ↓
 PostgreSQL
-
+```
 
 sem transferir regras de negócio para a camada de banco de dados ou para a interface.
 
@@ -540,9 +553,9 @@ The system can:
 
 Data is currently stored in JSON files located inside:
 
-
+```text
 data/
-
+```
 
 Repositories are responsible for accessing and modifying persisted data.
 
@@ -550,7 +563,7 @@ Other application layers do not need to directly manipulate JSON files.
 
 The general flow is:
 
-
+```text
 Interface
     ↓
 Service
@@ -558,7 +571,7 @@ Service
 Repository
     ↓
 JSON
-
+```
 
 This separation makes it possible to replace JSON persistence with a database in the future without rewriting the entire business and interface layers.
 
@@ -572,7 +585,7 @@ Instead of immediately overwriting the main file, new data is first written to a
 
 Simplified flow:
 
-
+```text
 current data
     ↓
 temporary .temp file
@@ -580,7 +593,7 @@ temporary .temp file
 write completed
     ↓
 replace original JSON
-
+```
 
 If a failure occurs while writing, the main persistence file is not immediately overwritten.
 
@@ -610,7 +623,7 @@ The project aims to assign each responsibility to a specific layer.
 
 Main structure:
 
-
+```text
 sistema-gerenciamento-pedidos/
 │
 ├── .gitignore
@@ -626,7 +639,7 @@ sistema-gerenciamento-pedidos/
 │   └── utils/
 │
 └── data/
-
+```
 
 ### `config`
 
@@ -708,7 +721,7 @@ Contains files used to persist application data.
 
 Simplified application flow:
 
-
+```text
 User
   ↓
 Interface
@@ -718,10 +731,11 @@ Service
 Repository
   ↓
 JSON
-
+```
 
 And back:
 
+```text
 JSON
   ↓
 Repository
@@ -731,6 +745,7 @@ Service
 Interface
   ↓
 User
+```
 
 Each layer has a distinct responsibility.
 
@@ -750,19 +765,29 @@ For that reason, a `requirements.txt` file is not necessary until external packa
 
 Clone the repository:
 
-git clone https://github.com/LevysLK/sistema-gerenciamento-pedidos
+```bash
+git clone <REPOSITORY_URL>
+```
 
 Enter the project directory:
 
+```bash
 cd sistema-gerenciamento-pedidos
+```
 
 Run:
 
+```bash
 python -u main.py
+```
 
 You may also use:
 
+```bash
 python main.py
+```
+
+The `-u` flag enables unbuffered Python output but is not required for normal execution.
 
 ---
 
@@ -770,12 +795,18 @@ python main.py
 
 The application entry point is:
 
+```text
 main.py
+```
 
 Startup is encapsulated inside a `main()` function and protected by:
 
+```python
 if __name__ == "__main__":
     main()
+```
+
+This allows the module to be imported by tests or other modules without automatically starting the interactive interface.
 
 ---
 
@@ -855,6 +886,7 @@ A future release may migrate persistence to a relational database.
 
 The current architecture is intended to make an evolution such as:
 
+```text
 Interface
     ↓
 Service
@@ -862,6 +894,7 @@ Service
 Repository
     ↓
 PostgreSQL
+```
 
 possible without moving business rules into the database layer or user interface.
 
