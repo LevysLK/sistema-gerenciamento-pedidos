@@ -27,10 +27,11 @@ class PaymentMethod(ABC):
     def to_dict(self) -> str:
         return self.name
 
-    def from_dict(cls_name: str) -> PaymentMethod:
-        for cls in PaymentMethod.__subclasses__():
-            if cls.__name__.lower() == cls_name.lower():
-                return cls()
+    @classmethod
+    def from_dict(cls, cls_name: str) -> PaymentMethod:
+        for payment_cls in cls.__subclasses__():
+            if payment_cls.__name__.lower() == cls_name.lower():
+                return payment_cls()
         raise ValueError("FORMAPGTO_FROMDICT: Forma de pagamento inválida.")
 
     @abstractmethod
