@@ -2,10 +2,10 @@ from ..domain import Product, Order, PaymentMethod
 
 #ORDERS OUTPUTS
 def show_empty_orders_rep():
-    return print(f'Não há pedidos cadastrados.')
+    print(f'Não há pedidos cadastrados.')
 
 def show_not_found_order():
-     return print('Pedido não encontrado.')
+    print('Pedido não encontrado.')
 
 def show_fail_to_complete_order(error_type):
     """
@@ -14,16 +14,16 @@ def show_fail_to_complete_order(error_type):
     Args:
         error_type: tipo de erro extraído com 'exception as error'.
     """
-    return print(f'Erro ao concluir pedido: {error_type}')
+    print(f'Erro ao concluir pedido: {error_type}')
 
 def show_success_order_cancel():
-    return print(f'Pedido cancelado com sucesso!')
+    print(f'Pedido cancelado com sucesso!')
 
 def show_success_order_create(order_number: str|int|float):
-    return print(f'Pedido nº{order_number} criado com sucesso!')
+    print(f'Pedido nº{order_number} criado com sucesso!')
 
 def show_success_order_export(order_number: str|int|float):
-    return print(f'Pedido nº{order_number} exportado com sucesso!')
+    print(f'Pedido nº{order_number} exportado com sucesso!')
 
 def show_order_error(msg_to_show: str):
     """
@@ -32,13 +32,13 @@ def show_order_error(msg_to_show: str):
     Args:
         msg_to_show: texto que complementa a mensagem exibida.
     """
-    return print(f'Este pedido está/foi {msg_to_show}.')
+    print(f'Este pedido está/foi {msg_to_show}.')
 
 def show_success_add_item(item_name: str):
-    return print(f'Produto {item_name!r} adicionado com sucesso!')
+    print(f'Produto {item_name!r} adicionado com sucesso!')
 
 def show_success_item_remove():
-    return print(f'Item removido com sucesso!')
+    print(f'Item removido com sucesso!')
 
 def show_order_items_list(order: Order):
     """
@@ -112,27 +112,27 @@ def show_all_orders(order_list: list[Order]):
         )
 
 def show_success_complete_order():
-    return print(f'Pedido pago e finalizado com sucesso!')
+    print(f'Pedido pago e finalizado com sucesso!')
 
 
 #PRODUCTS OUTPUTS
 def show_not_found_product():
-     return print('Produto não encontrado.')
+     print('Produto não encontrado.')
 
 def show_product_already_exists():
-    return print('Este produto já existe.')
+    print('Este produto já existe.')
 
 def show_success_product_create():
-    return print(f'Produto cadastrado com sucesso!')
+    print(f'Produto cadastrado com sucesso!')
 
 def show_success_product_deletion():
-    return print(f'Produto deletado com sucesso!')
+    print(f'Produto deletado com sucesso!')
 
 def show_success_product_update():
-    return print(f'Produto alterado com sucesso!')
+    print(f'Produto alterado com sucesso!')
 
 def show_empty_products_rep():
-    return print(f'Não há produtos cadastrados. Faça o cadastro primeiro.')
+    print(f'Não há produtos cadastrados. Faça o cadastro primeiro.')
 
 def show_products_list(products: list[Product]):
     """
@@ -170,18 +170,18 @@ def show_all_payment_methods(payment_methods: dict[str, PaymentMethod]):
         print(f'{key} - {value}')
 
 def show_success_set_payment_method():
-    return print(f'Forma de pagamento definida com sucesso!')
+    print(f'Forma de pagamento definida com sucesso!')
 
 def show_fail_payment_set():
-    return print(f'Erro ao definir forma de pagamento!')
+    print(f'Erro ao definir forma de pagamento!')
 
 
 #GENERAL OUTPUTS
 def show_invalid_input():
-    return print('Entrada inválida.')
+    print('Entrada inválida.')
 
 def corrupted_json_file():
-    return print('Arquivo JSON corrompido. Verifique antes de continuar.')
+    print('Arquivo JSON corrompido. Verifique antes de continuar.')
 
 def show_abort_operation():
-    return print(f'Operação cancelada!')
+    print(f'Operação cancelada!')
