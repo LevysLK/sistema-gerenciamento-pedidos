@@ -39,7 +39,7 @@ class Product:
             char in ('.', ',', '/', '\\', '|', '*', '+')
             for char in value
         ):
-            raise ValueError('CLIENTE: Nome inválido.')
+            raise ValueError('PRODUTO: Nome inválido.')
 
         self._name = value.strip().lower()
 
