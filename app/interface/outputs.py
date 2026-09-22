@@ -95,7 +95,7 @@ def show_order_details(order: Order):
         sep='\n',
      )
 
-def show_all_orders(order_list: list[Order]):
+def show_all_orders(order_list: list[dict]):
     """
     Exibe as informações dos pedidos da lista fornecida.
 
@@ -134,7 +134,7 @@ def show_success_product_update():
 def show_empty_products_rep():
     print(f'Não há produtos cadastrados. Faça o cadastro primeiro.')
 
-def show_products_list(products: list[Product]):
+def show_products_list(products: list[dict]):
     """
     Exibe as informações dos produtos da lista fornecida.
 
@@ -157,7 +157,7 @@ def show_product_details(product: Product):
 
 
 #PAYMENTS OUTPUTS
-def show_all_payment_methods(payment_methods: dict[str, PaymentMethod]):
+def show_all_payment_methods(payment_methods: dict[str, str]):
     """
     Exibe todas as formas de pagamento permitidas.
 
