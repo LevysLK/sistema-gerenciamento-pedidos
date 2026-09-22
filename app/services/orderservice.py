@@ -153,9 +153,7 @@ class OrderService:
         self._order_rep.replace_order(order)
 
     def complete_order(self, order: Order) -> bool:
-        if not order.complete_order():
-            return False
-
+        order.complete_order()
         self._order_rep.replace_order(order)
         return True
 
