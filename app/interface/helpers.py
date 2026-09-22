@@ -4,7 +4,7 @@ from typing import TypeVar
 
 ReturnType = TypeVar('ReturnType')
 
-def ask_until_valid(ask_func: Callable[[], ReturnType | None], error_types: tuple[type[Exception], ...], error_output: Callable[[], None]) -> ReturnType:
+def ask_until_valid(ask_func: Callable[[], ReturnType | None], error_types: type[Exception] | tuple[type[Exception]], error_output: Callable[[], None]) -> ReturnType:
     """
     Executa uma função de entrada até obter um resultado válido.
 
@@ -33,7 +33,7 @@ def ask_until_valid(ask_func: Callable[[], ReturnType | None], error_types: tupl
 
         return func_rtn
 
-def show_error_if_raised(ask_func:Callable[[], ReturnType], error_types:tuple[type[Exception]], error_output:Callable[[], None]) -> ReturnType | None:
+def show_error_if_raised(ask_func:Callable[[], ReturnType], error_types: type[Exception] | tuple[type[Exception]], error_output:Callable[[], None]) -> ReturnType | None:
     """
     Tenta executar uma função e imprime erro caso levante exceção.
 
